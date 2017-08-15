@@ -4,56 +4,78 @@ const app=express();
 var router = express.Router();
 var admin = require("firebase-admin");
 var db = admin.database();
-var User = require('../models/users');
+//var User = require('../models/users');
 
 
-router.get('/timestamps',(req,res)=>{
-	//console.log("deepak");
-	res.send(`${Date.now()}`);
-});
+// router.get('/timestamps',(req,res)=>{
+// 	//console.log("deepak");
+// 	res.send(`${Date.now()}`);
+// });
 
 
-router.get('/', (req,res)=>{
+// router.get('/', (req,res)=>{
 
-	getFacts().then(facts=>
+// 	getFacts().then(facts=>
+// 	{
+// 			res.json(facts);	
+// 	})
+// });
+
+
+// router.post('/update',(req,res)=>{
+// 		var newname = {
+// 			name : 'Dipak'
+// 		};
+// 		console.log(newname);
+// 		updateUser(newname);
+
+// });
+
+// function getFacts(){
+// 	const ref=db.ref('fact');
+// 	return ref.once('value').then(snap=>snap.val());
+// }
+
+
+// function updateUser(newname){
+// 		console.log(newname);
+// 		var factsRef = db.ref("/fact/name");
+// 		factsRef.update(newname,err =>{
+// 			if(err){
+// 				console.log("Error");
+// 			}
+// 			else{
+// 				console.log("No Error");
+// 			}
+// 		})
+// }
+
+
+// exports.notify = functions.database.ref('/fact/name').onWrite(snap =>{
+
+// console.log("Function called");
+// });
+
+router.post('/createOrganization',(req,res)=>{
+
+	organization={
+		name:req.body.name
+	}
+var orgRef = db.ref("/oranization");
+orgRef.push(organization);
+
+})
+
+router.get('/getOrganization',(req,res)=>{
+	getOrganization().then(organization=>
 	{
-			res.json(facts);	
-	})
-});
+			res.json(organization);	
+	});
+})
 
-
-router.post('/update',(req,res)=>{
-		var newname = {
-			name : 'Dipak'
-		};
-		console.log(newname);
-		updateUser(newname);
-
-});
-
-function getFacts(){
-	const ref=db.ref('fact');
+function getOrganization(){
+	const ref=db.ref('organizatoin');
 	return ref.once('value').then(snap=>snap.val());
 }
-
-
-function updateUser(newname){
-		console.log(newname);
-		var factsRef = db.ref("/fact/name");
-		factsRef.update(newname,err =>{
-			if(err){
-				console.log("Error");
-			}
-			else{
-				console.log("No Error");
-			}
-		})
-}
-
-
-exports.notify = functions.database.ref('/fact/name').onWrite(snap =>{
-
-console.log("Function called");
-});
 
 module.exports = router;
